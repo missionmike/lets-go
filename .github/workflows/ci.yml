@@ -11,8 +11,8 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build and Test
+  backend-ci:
+    name: Backend CI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -25,15 +25,19 @@ jobs:
 
       - name: Install dependencies
         run: go mod download
+        working-directory: ./backend
 
       - name: Install golangci-lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
       - name: Lint
         run: ~/go/bin/golangci-lint run
+        working-directory: ./backend
 
       - name: Build
         run: go build -v ./...
+        working-directory: ./backend
 
       - name: Test
         run: go test -v ./...
+        working-directory: ./backend

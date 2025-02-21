@@ -1,0 +1,16 @@
+{
+  "name": "lets-go",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "be-lint": "cd backend && golangci-lint run",
+    "be-start": "cd backend && go run server.go",
+    "fe-start": "cd frontend && nodemon dev-server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

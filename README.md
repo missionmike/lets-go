@@ -24,3 +24,11 @@ projects with dependencies in Docker, without needing to install them directly o
 
 From the VS Code Dev Container, I decided to pick a few key files and copy them into a new
 repository. This would serve as my boilerplate.
+
+### Getting Automated Help
+
+Since I'm new to Go, I figure it makes sense to find a linter, and set up a quick CI process to help
+me identify issues faster.
+
+I could also add git commit hooks, but I don't want to spend time on that right now. Next, I'll move
+into setting up some basic API endpoints.
