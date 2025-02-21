@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "be-lint": "cd backend && golangci-lint run",
-    "be-start": "cd backend && go run server.go",
+    "be-start": "cd backend && air",
     "fe-start": "cd frontend && nodemon dev-server.js"
   },
   "dependencies": {

@@ -335,4 +335,6 @@ out
 pkg
 debug
 
+# Project-specific.
 .env
+backend/tmp
