@@ -1,4 +1,4 @@
-package hello
+package api
 
 // User user type
 type User struct {
