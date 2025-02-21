@@ -3,6 +3,38 @@
 This project is an initial attempt to work with the Go language. I'll track some process and include
 documentation here.
 
+## Setup
+
+To set up, clone this repository and open in VS Code. This project uses a VS Code Dev Container to
+install all dependencies needed to develop and run the project.
+
+Next, copy `.env.example` to `.env` in the root folder.
+
+Then, run `Cmd` (Mac) / `Ctrl` (PC) + `Shift` + `P` to open the command palette, then run "Reopen in
+Container"
+
+VS Code should pull the necessary Docker images, configure the workspace and reopen the project in a
+dev container.
+
+The dev container should contain:
+
+- Postgres (available on port `5432` using default `postgres`/`postgres` login credentials)
+- Go Server for backend.
+- Nodemon Server for frontend.
+- All necessary extensions and scripts for Go and associated linting, testing, etc. To see all
+  available scripts, run `npm run` without any arguments.
+
+### Starting Backend
+
+To start the backend Go server, run `npm run be-start`. The server should start at `localhost:9000`.
+
+### Starting Frontend
+
+To start the frontend dev server, run `npm run fe-start`. The frontend should be available at
+`localhost:8080`.
+
+---
+
 ## History
 
 ### Go Docs

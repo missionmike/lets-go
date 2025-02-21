@@ -3,7 +3,9 @@
 {
   "name": "Go",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/go:1-1.23-bookworm",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
@@ -17,7 +19,12 @@
     // Configure properties specific to VS Code.
     "vscode": {
       "settings": {},
-      "extensions": ["streetsidesoftware.code-spell-checker", "esbenp.prettier-vscode", "golang.go"]
+      "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "esbenp.prettier-vscode",
+        "golang.go",
+        "ms-azuretools.vscode-docker"
+      ]
     }
   },
 
@@ -28,7 +35,7 @@
   // More info: https://containers.dev/implementors/json_reference/#port-attributes
   "portsAttributes": {
     "9000": {
-      "label": "Hello Remote World",
+      "label": "Go Server",
       "onAutoForward": "notify"
     },
     "5432": {
@@ -36,7 +43,7 @@
       "onAutoForward": "notify"
     },
     "8080": {
-      "label": "Go Server",
+      "label": "Frontend Server",
       "onAutoForward": "openBrowser"
     }
   },
