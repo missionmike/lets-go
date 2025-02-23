@@ -24,6 +24,16 @@ The dev container should contain:
 - All necessary extensions and scripts for Go and associated linting, testing, etc. To see all
   available scripts, run `npm run` without any arguments.
 
+### Initialize the Database
+
+This setup uses Postgres for the database, along with Prisma for the schema configuration.
+
+To initialize the schema, run `npm run prisma:migrate` from the root folder. Allow the `npx`
+installation of `prisma` to proceed.
+
+At the end of a successful setup, you should see a message
+`Your database is now in sync with your schema.`.
+
 ### Starting Backend
 
 To start the backend Go server, run `npm run be-start`. The server should start at `localhost:9000`.
