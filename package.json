@@ -5,8 +5,10 @@
   "scripts": {
     "backend:lint": "cd backend && golangci-lint run",
     "backend:dev": "cd backend && air",
-    "frontend:start": "cd frontend && nodemon dev-server.js",
-    "prisma:migrate": "cd backend && npx prisma migrate dev"
+    "frontend:dev": "cd frontend && nodemon dev-server.js",
+    "prisma:migrate": "cd backend && go run github.com/steebchen/prisma-client-go migrate dev",
+    "prisma:generate": "cd backend && go run github.com/steebchen/prisma-client-go generate",
+    "prisma:seed": "cd backend && go run ./seed/seed.go"
   },
   "dependencies": {
     "express": "^4.17.1"

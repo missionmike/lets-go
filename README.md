@@ -28,19 +28,25 @@ The dev container should contain:
 
 This setup uses Postgres for the database, along with Prisma for the schema configuration.
 
-To initialize the schema, run `npm run prisma:migrate` from the root folder. Allow the `npx`
-installation of `prisma` to proceed.
+1. To initialize the schema, run `npm run prisma:migrate` from the root folder. Allow the `npx`
+   installation of `prisma` to proceed.
 
 At the end of a successful setup, you should see a message
 `Your database is now in sync with your schema.`.
 
+2. Then run `npm run prisma:generate` to generate the interfaces for types based on the schema.
+
+3. Seed the database by running `npm run prisma:seed`. You should see post and postmeta data in the
+   tables.
+
 ### Starting Backend
 
-To start the backend Go server, run `npm run be-start`. The server should start at `localhost:9000`.
+To start the backend Go server, run `npm run backend:dev`. The server should start at
+`localhost:9000`.
 
 ### Starting Frontend
 
-To start the frontend dev server, run `npm run fe-start`. The frontend should be available at
+To start the frontend dev server, run `npm run frontend:dev`. The frontend should be available at
 `localhost:8080`.
 
 ---
