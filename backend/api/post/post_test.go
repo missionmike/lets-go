@@ -7,12 +7,36 @@ package post
 import (
 	"context"
 	"database/sql"
+	"os"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
 var dbOpen = sql.Open
+
+func TestMain(m *testing.M) {
+	// Mock the database connection
+	db, mock, err := sqlmock.New()
+	if err != nil {
+		panic("an error was not expected when opening a stub database connection")
+	}
+	defer db.Close()
+
+	originalOpen := dbOpen
+	defer func() { dbOpen = originalOpen }()
+	dbOpen = func(driverName, dataSourceName string) (*sql.DB, error) {
+		return db, nil
+	}
+
+	code := m.Run()
+
+	if err := mock.ExpectationsWereMet(); err != nil {
+		panic("there were unfulfilled expectations: " + err.Error())
+	}
+
+	os.Exit(code)
+}
 
 func TestGetAllPosts(t *testing.T) {
 	db, mock, err := sqlmock.New()
