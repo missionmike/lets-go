@@ -338,3 +338,5 @@ debug
 # Project-specific.
 .env
 backend/tmp
+coverage.out
+coverage.html
