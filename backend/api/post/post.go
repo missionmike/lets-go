@@ -22,7 +22,7 @@ type Post struct {
 	Published bool   `json:"published"`
 }
 
-func GetAllPosts(c context.Context) (string, error) {
+func GetAllPosts(c context.Context) ([]byte, error) {
 	// sslmode=disable is needed on localhost because the database is not configured to use SSL.
 	// This is not secure for production, but it's fine for local development.
 	// If this were a project set up for deployment, I'd conditionally set the sslmode based on the environment.
@@ -34,7 +34,7 @@ func GetAllPosts(c context.Context) (string, error) {
 		log.Printf("Failed to connect to database: %v", err)
 
 		// TODO: Return a more user-friendly error message, and track the error in Sentry.
-		return "", err
+		return nil, err
 	}
 	defer db.Close()
 
@@ -56,7 +56,7 @@ func GetAllPosts(c context.Context) (string, error) {
 			log.Printf("Failed to scan row: %v", err)
 
 			// TODO: Return a more user-friendly error message, and track the error in Sentry.
-			return "", err
+			return nil, err
 		}
 		posts = append(posts, post)
 	}
@@ -67,9 +67,8 @@ func GetAllPosts(c context.Context) (string, error) {
 		log.Printf("Failed to marshal posts: %v", err)
 
 		// TODO: Return a more user-friendly error message, and track the error in Sentry.
-		return "", err
+		return nil, err
 	}
 
-	return string(postJSON), nil
-
+	return postJSON, nil
 }

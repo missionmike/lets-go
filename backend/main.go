@@ -34,7 +34,8 @@ func main() {
 			return
 		}
 
-		if _, err := io.WriteString(w, fmt.Sprintf("%v", posts)); err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		if _, err := w.Write(posts); err != nil {
 			http.Error(w, "Failed to write response", http.StatusInternalServerError)
 		}
 	})
