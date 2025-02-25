@@ -18,9 +18,9 @@ dev container.
 
 The dev container should contain:
 
-- Postgres (available on port `5432` using default `postgres`/`postgres` login credentials)
-- Go Server for backend.
-- Nodemon Server for frontend.
+- **Postgres** (available on port `5432` using default `postgres`/`postgres` login credentials)
+- **Go** dev server for backend.
+- **Nodemon** server for frontend.
 - All necessary extensions and scripts for Go and associated linting, testing, etc. To see all
   available scripts, run `npm run` without any arguments.
 
@@ -28,29 +28,44 @@ The dev container should contain:
 
 This setup uses Postgres for the database, along with Prisma for the schema configuration.
 
-1. To initialize the schema, run `npm run prisma:migrate` from the root folder. Allow the `npx`
-   installation of `prisma` to proceed.
+1. To initialize the schema, run `npm run prisma:migrate` from the root folder.
 
-At the end of a successful setup, you should see a message
-`Your database is now in sync with your schema.`.
+   <img width="859" alt="image" src="https://github.com/user-attachments/assets/d143f444-3966-4026-b28c-b600051787cf" />
 
 2. Then run `npm run prisma:generate` to generate the interfaces for types based on the schema.
 
-3. Seed the database by running `npm run prisma:seed`. You should see post and postmeta data in the
-   tables:
+   <img width="697" alt="image" src="https://github.com/user-attachments/assets/0c8a9000-48f5-4e9c-afd3-cbd2a1eba749" />
+
+3. Seed the database by running `npm run prisma:seed`.
+
+   <img width="857" alt="image" src="https://github.com/user-attachments/assets/73794186-6482-4f9d-ac23-e16f46edfd5a" />
+
+   You should see post and postmeta data in the tables with data if you via in a client like
+   [DBeaver](https://dbeaver.io/):
 
    <img width="1601" alt="image" src="https://github.com/user-attachments/assets/1993864d-0ecd-4475-8bd5-239b61654729" />
-
 
 ### Starting Backend
 
 To start the backend Go server, run `npm run backend:dev`. The server should start at
-`localhost:9000`.
+`localhost:9000`:
+
+<img width="807" alt="image" src="https://github.com/user-attachments/assets/d0f52e64-a097-4464-b507-7aad0f18254f" />
+
+#### API Endpoints
+
+If backend server is running locally, visit [Postman](https://www.postman.com/universal-sunset-980198/workspace/missionmike/collection/2595954-14b038f8-356d-4b36-9014-62a6990c6a3f?action=share&creator=2595954) to check out the endpoints. For example, a `GET`
+endpoint on `/api/posts` yields:
+
+<img width="824" alt="image" src="https://github.com/user-attachments/assets/f3868af2-ead5-42a8-a5a1-5e21bd8ec464" />
 
 ### Starting Frontend
 
 To start the frontend dev server, run `npm run frontend:dev`. The frontend should be available at
 `localhost:8080`.
+
+> Note: time-allowing, I'd set up a frontend to fetch and display data, etc. However since the
+> purpose of this project is primarily to get familiar with Go, I focused on the backend API.
 
 ---
 
@@ -83,3 +98,7 @@ me identify issues faster.
 
 I could also add git commit hooks, but I don't want to spend time on that right now. Next, I'll move
 into setting up some basic API endpoints.
+
+Using the linter was helpful to identify areas where my code fell short. If I were to put more time
+into this, I'd set up some error tracking with [Sentry](https://docs.sentry.io/platforms/go/) or
+other preferred method of tracking errors.
