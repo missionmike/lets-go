@@ -10,7 +10,7 @@ generator db {
 model Post {
     id        String     @id @default(cuid())
     createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
+    updatedAt DateTime   @default(now()) @updatedAt
     title     String
     published Boolean
     desc      String?
@@ -20,7 +20,7 @@ model Post {
 model PostMeta {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    updatedAt DateTime @default(now()) @updatedAt
     post      Post     @relation(fields: [postId], references: [id])
     postId    String
     key       String

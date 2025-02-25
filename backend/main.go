@@ -50,10 +50,21 @@ func getPostByID(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, post)
 }
 
+func createPost(w http.ResponseWriter, r *http.Request) error {
+	title := r.FormValue("title")
+	desc := r.FormValue("desc")
+	id, err := post.CreatePost(r.Context(), title, desc)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, []byte(id))
+}
+
 func main() {
 	// API endpoints
 	http.HandleFunc("/api/posts", withErrorHandling(getAllPosts, http.MethodGet))
 	http.HandleFunc("/api/post", withErrorHandling(getPostByID, http.MethodGet))
+	http.HandleFunc("/api/post/create", withErrorHandling(createPost, http.MethodPost))
 
 	// Start the server
 	portNumber := "9000"
