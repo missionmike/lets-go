@@ -71,12 +71,22 @@ func updatePost(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func deletePost(w http.ResponseWriter, r *http.Request) error {
+	id := r.FormValue("id")
+	err := post.DeletePost(r.Context(), id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	// API endpoints
 	http.HandleFunc("/api/posts", withErrorHandling(getAllPosts, http.MethodGet))
 	http.HandleFunc("/api/post", withErrorHandling(getPostByID, http.MethodGet))
 	http.HandleFunc("/api/post/create", withErrorHandling(createPost, http.MethodPost))
 	http.HandleFunc("/api/post/update", withErrorHandling(updatePost, http.MethodPut))
+	http.HandleFunc("/api/post/delete", withErrorHandling(deletePost, http.MethodDelete))
 
 	// Start the server
 	portNumber := "9000"
