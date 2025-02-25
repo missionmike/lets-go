@@ -60,11 +60,23 @@ func createPost(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, []byte(id))
 }
 
+func updatePost(w http.ResponseWriter, r *http.Request) error {
+	id := r.FormValue("id")
+	title := r.FormValue("title")
+	desc := r.FormValue("desc")
+	err := post.UpdatePost(r.Context(), id, title, desc)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	// API endpoints
 	http.HandleFunc("/api/posts", withErrorHandling(getAllPosts, http.MethodGet))
 	http.HandleFunc("/api/post", withErrorHandling(getPostByID, http.MethodGet))
 	http.HandleFunc("/api/post/create", withErrorHandling(createPost, http.MethodPost))
+	http.HandleFunc("/api/post/update", withErrorHandling(updatePost, http.MethodPut))
 
 	// Start the server
 	portNumber := "9000"
