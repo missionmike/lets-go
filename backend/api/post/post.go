@@ -4,23 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"lets-go/api"
 	"log"
 	"os"
 
 	// Thanks to: https://www.calhoun.io/connecting-to-a-postgresql-database-with-gos-database-sql-package/
 	_ "github.com/lib/pq"
 )
-
-// Post represents a blog post. If using Prisma ORM, this would be a model, and
-// it would be generated automatically based on the schema.prisma definitions.
-type Post struct {
-	ID        string `json:"id"`
-	Title     string `json:"title"`
-	Desc      string `json:"desc"`
-	CreatedAt string `json:"createdAt"` // In hindsight, snake_case may have been better.
-	UpdatedAt string `json:"updatedAt"`
-	Published bool   `json:"published"`
-}
 
 func GetAllPosts(c context.Context) ([]byte, error) {
 	// sslmode=disable is needed on localhost because the database is not configured to use SSL.
@@ -49,9 +39,9 @@ func GetAllPosts(c context.Context) ([]byte, error) {
 	}
 
 	// Iterate over the rows and create a Post for each one.
-	var posts []Post
+	var posts []api.Post
 	for rows.Next() {
-		var post Post
+		var post api.Post
 		if err := rows.Scan(&post.ID, &post.Title, &post.Desc, &post.CreatedAt, &post.UpdatedAt, &post.Published); err != nil {
 			log.Printf("Failed to scan row: %v", err)
 

@@ -7,42 +7,37 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"net/http"
 
-	"lets-go/api"
 	"lets-go/api/post"
 )
 
-func handle(w http.ResponseWriter, r *http.Request) {
-	// I asked GitHub Copilot about the lint errors "return value of io.WriteString is not checked"
-	// and it showed me the following code. I'm not sure if this is the best way to handle the error,
-	// but I'm going to use it for now.
-	if _, err := io.WriteString(w, api.Hello()); err != nil {
-		http.Error(w, "Failed to write response", http.StatusInternalServerError)
+func get_posts(w http.ResponseWriter, r *http.Request) {
+	posts, err := post.GetAllPosts(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	format_response(posts)(w, r)
+}
+
+// Utility function to format the response as JSON for every API endpoint.
+func format_response(data []byte) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if _, err := w.Write(data); err != nil {
+			http.Error(w, "Failed to write response", http.StatusInternalServerError)
+		}
 	}
 }
 
 func main() {
+	// API endpoints go here.
+	http.HandleFunc("/api/posts", get_posts)
+
+	// Start the server.
 	portNumber := "9000"
-
-	http.HandleFunc("/api/", handle)
-	http.HandleFunc("/api/posts", func(w http.ResponseWriter, r *http.Request) {
-		posts, err := post.GetAllPosts(r.Context())
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		if _, err := w.Write(posts); err != nil {
-			http.Error(w, "Failed to write response", http.StatusInternalServerError)
-		}
-	})
-
 	if err := http.ListenAndServe(":"+portNumber, nil); err != nil {
 		fmt.Println("Failed to start server:", err)
 	}
-
 	fmt.Println("Server listening on port ", portNumber)
 }

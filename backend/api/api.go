@@ -1,30 +1,12 @@
 package api
 
-// User user type
-type User struct {
-	ID   int64
-	Name string
-	Addr *Address
-}
-
-// Address address type
-type Address struct {
-	City   string
-	ZIP    int
-	LatLng [2]float64
-}
-
-var michael = User{
-	ID:   1,
-	Name: "Michael",
-	Addr: &Address{
-		City:   "Newport",
-		ZIP:    97365,
-		LatLng: [2]float64{44.6368, 124.0535},
-	},
-}
-
-// Hello writes a welcome string
-func Hello() string {
-	return "Hello, " + michael.Name
+// Post represents a blog post. If using Prisma ORM, this would be a model, and
+// it would be generated automatically based on the schema.prisma definitions.
+type Post struct {
+	ID        string `json:"id"`
+	Title     string `json:"title"`
+	Desc      string `json:"desc"`
+	CreatedAt string `json:"createdAt"` // In hindsight, snake_case may have been better.
+	UpdatedAt string `json:"updatedAt"`
+	Published bool   `json:"published"`
 }
