@@ -27,6 +27,9 @@ jobs:
         run: go mod download
         working-directory: ./backend
 
+      - name: Generate Prisma Client
+        run: npm run prisma:generate
+
       - name: Install golangci-lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
