@@ -37,7 +37,10 @@ At the end of a successful setup, you should see a message
 2. Then run `npm run prisma:generate` to generate the interfaces for types based on the schema.
 
 3. Seed the database by running `npm run prisma:seed`. You should see post and postmeta data in the
-   tables.
+   tables:
+
+   <img width="1601" alt="image" src="https://github.com/user-attachments/assets/1993864d-0ecd-4475-8bd5-239b61654729" />
+
 
 ### Starting Backend
 
