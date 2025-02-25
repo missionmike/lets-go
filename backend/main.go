@@ -51,9 +51,7 @@ func getPostByID(w http.ResponseWriter, r *http.Request) error {
 }
 
 func createPost(w http.ResponseWriter, r *http.Request) error {
-	title := r.FormValue("title")
-	desc := r.FormValue("desc")
-	id, err := post.CreatePost(r.Context(), title, desc)
+	id, err := post.CreatePost(r.Context(), r.FormValue("title"), r.FormValue("desc"))
 	if err != nil {
 		return err
 	}
@@ -61,23 +59,32 @@ func createPost(w http.ResponseWriter, r *http.Request) error {
 }
 
 func updatePost(w http.ResponseWriter, r *http.Request) error {
-	id := r.FormValue("id")
-	title := r.FormValue("title")
-	desc := r.FormValue("desc")
-	err := post.UpdatePost(r.Context(), id, title, desc)
-	if err != nil {
-		return err
+	if r.FormValue("id") == "" {
+		http.Error(w, "Missing post ID", http.StatusBadRequest)
+		return nil
 	}
-	return nil
+
+	if r.FormValue("title") == "" && r.FormValue("desc") == "" {
+		http.Error(w, "Missing title or description", http.StatusBadRequest)
+		return nil
+	}
+
+	foundPost, err := post.GetPostByID(r.Context(), r.FormValue("id"))
+	if err != nil {
+		http.Error(w, "Failed to get post", http.StatusInternalServerError)
+		return nil
+	}
+
+	if foundPost == nil {
+		http.Error(w, "Post not found", http.StatusNotFound)
+		return nil
+	}
+
+	return post.UpdatePost(r.Context(), r.FormValue("id"), r.FormValue("title"), r.FormValue("desc"))
 }
 
 func deletePost(w http.ResponseWriter, r *http.Request) error {
-	id := r.FormValue("id")
-	err := post.DeletePost(r.Context(), id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return post.DeletePost(r.Context(), r.FormValue("id"))
 }
 
 func main() {

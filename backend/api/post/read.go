@@ -76,6 +76,12 @@ func GetPostByID(c context.Context, id string) ([]byte, error) {
 		log.Printf("Failed to query database: %v", err)
 	}
 
+	// If row is empty, return an error.
+	if !row.Next() {
+		log.Printf("Post not found")
+		return nil, err
+	}
+
 	var post api.Post
 	if row.Next() {
 		if err := row.Scan(
