@@ -11,6 +11,7 @@ import (
 	"net/http"
 
 	"lets-go/api"
+	"lets-go/api/post"
 )
 
 func handle(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +27,17 @@ func main() {
 	portNumber := "9000"
 
 	http.HandleFunc("/api/", handle)
+	http.HandleFunc("/api/posts", func(w http.ResponseWriter, r *http.Request) {
+		posts, err := post.GetAllPosts(r.Context())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if _, err := io.WriteString(w, fmt.Sprintf("%v", posts)); err != nil {
+			http.Error(w, "Failed to write response", http.StatusInternalServerError)
+		}
+	})
 
 	if err := http.ListenAndServe(":"+portNumber, nil); err != nil {
 		fmt.Println("Failed to start server:", err)

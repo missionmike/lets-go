@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["devcontainers", "esbenp", "golangci", "steebchen", "testdata", "tmpl"]
+  "cSpell.words": [
+    "devcontainers",
+    "esbenp",
+    "golangci",
+    "sslmode",
+    "steebchen",
+    "testdata",
+    "tmpl"
+  ]
 }

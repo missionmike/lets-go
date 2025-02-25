@@ -3,7 +3,7 @@ package data
 import (
 	"context"
 	"lets-go/db"
-	"lets-go/util"
+	"lets-go/util/helpers"
 	"log"
 )
 
@@ -12,16 +12,19 @@ func SeedPosts() {
 	posts := []db.InnerPost{
 		{
 			Title: "First Post",
-			Desc:  util.Ptr("This is the content of the first post."),
+			Desc:  helpers.Ptr("This is the content of the first post."),
 		},
 		{
 			Title: "Second Post",
-			Desc:  util.Ptr("This is the content of the second post."),
+			Desc:  helpers.Ptr("This is the content of the second post."),
 		},
 	}
 
 	client := db.NewClient()
-	client.Connect()
+	if err := client.Connect(); err != nil {
+		panic(err)
+	}
+
 	ctx := context.Background()
 
 	// Delete existing posts.
@@ -53,14 +56,19 @@ func SeedPosts() {
 	}
 
 	for _, post := range posts {
-		print("Creating post: ", post.Title, "\n")
+		log.Printf("Creating post: %s\n", post.Title)
 
-		client.Post.CreateOne(
+		if _, err := client.Post.CreateOne(
 			db.Post.Title.Set(post.Title),
 			db.Post.Published.Set(true),
 			db.Post.Desc.Set(*post.Desc),
-		).Exec(ctx)
+		).Exec(ctx); err != nil {
+			log.Printf("Error creating post: %v\n", err)
+			panic(err)
+		}
 	}
 
-	client.Disconnect()
+	if err := client.Disconnect(); err != nil {
+		panic(err)
+	}
 }
