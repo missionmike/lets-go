@@ -1,8 +1,3 @@
-/*----------------------------------------------------------------------------------------
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License. See LICENSE in the project root for license information.
- *---------------------------------------------------------------------------------------*/
-
 package main
 
 import (
@@ -20,6 +15,14 @@ func get_posts(w http.ResponseWriter, r *http.Request) {
 	format_response(posts)(w, r)
 }
 
+func get_post_by_id(w http.ResponseWriter, r *http.Request) {
+	post, err := post.GetPostByID(r.Context(), r.URL.Query().Get("id"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	format_response(post)(w, r)
+}
+
 // Utility function to format the response as JSON for every API endpoint.
 func format_response(data []byte) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -33,6 +36,7 @@ func format_response(data []byte) http.HandlerFunc {
 func main() {
 	// API endpoints go here.
 	http.HandleFunc("/api/posts", get_posts)
+	http.HandleFunc("/api/post", get_post_by_id)
 
 	// Start the server.
 	portNumber := "9000"
