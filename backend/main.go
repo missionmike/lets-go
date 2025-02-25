@@ -7,41 +7,58 @@ import (
 	"lets-go/api/post"
 )
 
-func get_posts(w http.ResponseWriter, r *http.Request) {
-	posts, err := post.GetAllPosts(r.Context())
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	format_response(posts)(w, r)
-}
+// HandlerFunc is a custom type that returns an error
+type HandlerFunc func(w http.ResponseWriter, r *http.Request) error
 
-func get_post_by_id(w http.ResponseWriter, r *http.Request) {
-	post, err := post.GetPostByID(r.Context(), r.URL.Query().Get("id"))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-	format_response(post)(w, r)
-}
-
-// Utility function to format the response as JSON for every API endpoint.
-func format_response(data []byte) http.HandlerFunc {
+// Middleware to handle common error responses and HTTP method validation
+func withErrorHandling(h HandlerFunc, allowedMethod string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if _, err := w.Write(data); err != nil {
-			http.Error(w, "Failed to write response", http.StatusInternalServerError)
+		if allowedMethod != "" && r.Method != allowedMethod {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		err := h(w, r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	}
 }
 
-func main() {
-	// API endpoints go here.
-	http.HandleFunc("/api/posts", get_posts)
-	http.HandleFunc("/api/post", get_post_by_id)
+func writeJSON(w http.ResponseWriter, data []byte) error {
+	w.Header().Set("Content-Type", "application/json")
+	_, err := w.Write(data)
+	if err != nil {
+		return fmt.Errorf("failed to write response: %w", err)
+	}
+	return nil
+}
 
-	// Start the server.
+func getAllPosts(w http.ResponseWriter, r *http.Request) error {
+	posts, err := post.GetAllPosts(r.Context())
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, posts)
+}
+
+func getPostByID(w http.ResponseWriter, r *http.Request) error {
+	post, err := post.GetPostByID(r.Context(), r.URL.Query().Get("id"))
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, post)
+}
+
+func main() {
+	// API endpoints
+	http.HandleFunc("/api/posts", withErrorHandling(getAllPosts, http.MethodGet))
+	http.HandleFunc("/api/post", withErrorHandling(getPostByID, http.MethodGet))
+
+	// Start the server
 	portNumber := "9000"
+	fmt.Println("Server starting on port", portNumber)
 	if err := http.ListenAndServe(":"+portNumber, nil); err != nil {
 		fmt.Println("Failed to start server:", err)
 	}
-	fmt.Println("Server listening on port ", portNumber)
 }
